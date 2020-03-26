@@ -6,7 +6,9 @@ var Queue = function() {
   let instanceQueueMethods = Object.create(queueMethods);
 
   // create storage container
-  instanceQueueMethods['data'] = [];
+  instanceQueueMethods['storage'] = {};
+  instanceQueueMethods.start = 0;
+  instanceQueueMethods.end = 0;
 
   // return instance
   return instanceQueueMethods;
@@ -17,17 +19,28 @@ var queueMethods = {};
 
 // enqueue method
 queueMethods.enqueue = function(value) {
-  this.data.push(value);
+  this.storage[this.start] = value;
+  this.start++;
 }
 
 // dequeue method
 queueMethods.dequeue = function() {
-  return this.data.shift();
+  let isEmptyObj = (this.end in this.storage);
+
+  if(isEmptyObj) {
+    let dequeueValue = this.storage[this.end];
+
+    delete this.storage[this.end];
+
+    this.end++;
+
+    return dequeueValue;
+  }
 }
 
 // size method
 queueMethods.size = function() {
-  return this.data.length;
+  return this.start - this.end;
 }
 
 

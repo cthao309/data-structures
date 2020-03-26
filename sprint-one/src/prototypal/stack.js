@@ -6,7 +6,8 @@ var Stack = function() {
   let instanceOfStackMethods = Object.create(stackMethods);
 
   // create a storage container
-  instanceOfStackMethods['data'] = [];
+  instanceOfStackMethods['storage'] = {};
+  instanceOfStackMethods.index = 0;
 
   // retturn instance
   return instanceOfStackMethods;
@@ -16,18 +17,27 @@ var stackMethods = {};
 
 // push method
 stackMethods.push = function(value) {
-  this.data.push(value);
+  this.storage[this.index] = value;
+  this.index++;
 }
 
 // pop method
 stackMethods.pop = function() {
-  if(this.data.length > 0) {
-    return this.data.pop();
+  if(this.index === 0) {
+    return undefined;
+  } else {
+    this.index--;
+
+    let popValue = this.storage[this.index];
+
+    delete this.storage[this.index];
+
+    return popValue;
   }
 }
 
 // size method
 stackMethods.size = function() {
-  return this.data.length;
+  return this.index;
 }
 
