@@ -6,7 +6,8 @@ var Stack = function() {
   let cloneStackMethods = {...stackMethods};
 
   // declare storage container
-  cloneStackMethods['data'] = [];
+  cloneStackMethods['storage'] = {};
+  cloneStackMethods.index = 0;
 
   return cloneStackMethods;
 };
@@ -15,19 +16,27 @@ var stackMethods = {};
 
 // push method
 stackMethods.push = function(value) {
-  this.data.push(value);
+  this.storage[this.index++] = value;
 }
 
 // pop method
 stackMethods.pop = function() {
-  if(this.data.length) {
-    return this.data.pop();
+  if(this.index === 0) {
+    return undefined;
+  } else {
+    this.index--;
+
+    let popValue = this.storage[this.index];
+
+    delete this.storage[this.index];
+
+    return popValue;
   }
 }
 
 // size method
 stackMethods.size = function() {
-  return this.data.length;
+  return this.index;
 }
 
 

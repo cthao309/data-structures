@@ -6,7 +6,9 @@ var Queue = function() {
   let cloneQueueMethods = {...queueMethods};
 
   // create a storage container
-  cloneQueueMethods['data'] = [];
+  cloneQueueMethods['storage'] = {};
+  cloneQueueMethods.start = 0;
+  cloneQueueMethods.end = 0;
 
   return cloneQueueMethods;
 };
@@ -15,19 +17,28 @@ var queueMethods = {};
 
 // enqueue method
 queueMethods.enqueue = function(value) {
-  this.data.push(value);
+  this.storage[this.start] = value;
+  this.start++;
 }
 
 // dequeue method
 queueMethods.dequeue = function() {
-  if(this.data.length) {
-    return this.data.shift();
+  let isEmptyObj = (this.end in this.storage);
+
+  if(isEmptyObj) {
+    let dequeueValue = this.storage[this.end];
+
+    delete this.storage[this.end]
+
+    this.end++;
+
+    return dequeueValue;
   }
 }
 
 // size method
 queueMethods.size = function() {
-  return this.data.length;
+  return this.start - this.end;
 }
 
 
