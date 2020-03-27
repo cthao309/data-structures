@@ -6,7 +6,22 @@ var HashTable = function() {
 };
 
 HashTable.prototype.insert = function(k, v) {
+  // get the index of the key
   var index = getIndexBelowMaxForKey(k, this._limit);
+
+  // retreive the data set
+  let buckets = this._storage.get(index) || [];
+
+  // loop through the dataset
+  for(let i = 0; i < dataContainer.length; i++) {
+    let tuples = dataContainer[i];
+
+
+
+
+  }
+
+
 };
 
 HashTable.prototype.retrieve = function(k) {

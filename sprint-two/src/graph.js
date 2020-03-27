@@ -25,8 +25,26 @@ Graph.prototype.removeNode = function(node) {
   // check to see if there exist such a node, if there is then set the node to a new variable to be return
   let isValidNode = this.contains(node);
 
-  // remove from the container
-  isValidNode ? delete this.nodes[node] : null;
+  if(isValidNode) {
+    // remove from the container
+    delete this.nodes[node];
+
+    // loop the edges
+
+    //     3 => {}
+    //   /   \
+    // 2   -   1
+
+   for(let key in this.nodes) {
+     let edgesContainer = this.nodes[key]['edges'];
+
+     if(this.contains(edgesContainer[node])) {
+       delete edgesContainer[node];
+     }
+
+     this.nodes[key]['edges'] = edgesContainer;
+   }
+  }
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
@@ -37,10 +55,12 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
   // if there there such a node
   if(isValidNodes) {
     // does it has an edges that contains the toNode?
-    let isValidEdge = (fromNode in this.nodes[toNode]['edges']);
+    let isValidEdges = (fromNode in this.nodes[toNode]['edges']) && (toNode in this.nodes[fromNode]['edges']);
 
-    return isValidEdge ? true : false;
+    return isValidEdges;
   }
+
+  return;
 };
 
 // Connects two nodes in a graph by adding an edge between them.
@@ -50,7 +70,8 @@ Graph.prototype.addEdge = function(fromNode, toNode) {
 
   // if the toNode exist
   if(isValidNodes) {
-    this.nodes[toNode]['edges'][fromNode] = true;
+    this.nodes[toNode]['edges'][fromNode] = null;
+    this.nodes[fromNode]['edges'][toNode] = null;
   }
 };
 
@@ -60,12 +81,10 @@ Graph.prototype.removeEdge = function(fromNode, toNode) {
   let isValidNodes = this.contains(fromNode) && this.contains(toNode);
 
   // if the fromNode exist
-  if(isValidNode) {
-    delete this.nodes.fromNode[edges].toNode;
-    delete this.nodes.toNode[edges].fromNode;
+  if(isValidNodes) {
+    delete this.nodes[fromNode]['edges'][toNode];
+    delete this.nodes[toNode]['edges'][fromNode];
   }
-
-  return;
 };
 
 // Pass in a callback which will be executed on each node of the graph.
