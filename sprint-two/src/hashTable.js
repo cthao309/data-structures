@@ -13,6 +13,8 @@ HashTable.prototype.insert = function(k, v) {
   // retreive the data set
   let buckets = this._storage.get(index) || [];
 
+  let isFound = false;
+
   // iterate through the bucket to find if the key is already there
   for(let i = 0; i < buckets.length; i++) {
     let tuple = buckets[i];
@@ -20,20 +22,25 @@ HashTable.prototype.insert = function(k, v) {
     if(tuple[0] === k) {
       // replace the old at tuple[0] to the new value
       tuple[1] = v;
+      isFound = true;
+      break;
     }
   }
 
-  // push the tuple in
-  buckets.push([k, v]);
+  if(!isFound) {
+    // push the tuple in
+    buckets.push([k, v]);
 
-  // increment the size
-  this.size++;
+    // increment the size
+    this.size++;
+  }
+
 
   // a [bob's value, null , null, null, null, null, null, null null null kevin's value] kenvin = index 9.
 
   // check if size is 75% of capacity
-  if (this.size === Math.ceil(this._limit*0.75)) {
-    this.resize();
+  if (this.size > this._limit * 0.75) {
+    this.resize(this._limit * 2);
   }
 
   this._storage.set(index, buckets);
@@ -64,20 +71,52 @@ HashTable.prototype.remove = function(k) {
   // retreive the data set
   let buckets = this._storage.get(index);
 
+  if(!buckets) {
+    return;
+  }
+
   // loop through the data set
   for (let i = 0; i < buckets.length; i++) {
     let tuple = buckets[i];
     if (tuple[0] === k) {
       buckets.splice(i, 1);
+
+      this.size--;
+      // check if size is 75% of capacity
+      if (this.size > this._limit * 0.25) {
+        this.resize(this._limit/2);
+      }
+
+      return tuple[1];
     }
   }
+
+  return null;
 };
 
 // function to determine the size and double the length
-HashTable.prototype.resize = function() {
+HashTable.prototype.resize = function(newLimit) {
   // double in size when it reach array length of 75%
-  this._limit = this._limit * 2;
-  this._storage = LimitedArray(this._limit);
+  let oldStorage = this._storage;
+
+  this._limit = newLimit;
+
+  this._storage = LimitedArray(newLimit);
+
+  this.size = 0;
+
+  // iterate over told storage and re-insert
+  oldStorage.each(function(bucket) {
+    if(!bucket) {
+      return;
+    }
+
+    for(let i = 0; i < bucket.length; i++) {
+      let tuple = bucket[i];
+
+      this.insert(tuple[0], tuple[1])
+    }
+  }.bind(this));
 }
 
 
