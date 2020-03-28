@@ -38,11 +38,9 @@ Graph.prototype.removeNode = function(node) {
    for(let key in this.nodes) {
      let edgesContainer = this.nodes[key]['edges'];
 
-     if(this.contains(edgesContainer[node])) {
+     if(node in edgesContainer) {
        delete edgesContainer[node];
      }
-
-     this.nodes[key]['edges'] = edgesContainer;
    }
   }
 };
@@ -60,7 +58,8 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
     return isValidEdges;
   }
 
-  return;
+  // default to false
+  return false;
 };
 
 // Connects two nodes in a graph by adding an edge between them.

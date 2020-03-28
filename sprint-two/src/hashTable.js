@@ -49,12 +49,10 @@ HashTable.prototype.remove = function(k) {
 
   for (let i = 0; i < buckets.length; i++) {
     let tuple = buckets[i];
-    if ( tuple[0] === k ) {
+    if (tuple[0] === k) {
       buckets.splice(i, 1);
     }
   }
-
-
 };
 
 
