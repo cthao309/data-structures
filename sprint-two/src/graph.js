@@ -29,14 +29,13 @@ Graph.prototype.removeNode = function(node) {
     // remove from the container
     delete this.nodes[node];
 
-    // loop the edges
-
     //     3 => {}
     //   /   \
     // 2   -   1
 
-   for(let key in this.nodes) {
-     let edgesContainer = this.nodes[key]['edges'];
+    // loop the edges
+    for(let key in this.nodes) {
+      let edgesContainer = this.nodes[key]['edges'];
 
      if(node in edgesContainer) {
        delete edgesContainer[node];
