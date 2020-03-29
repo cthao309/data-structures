@@ -16,7 +16,12 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
     binarySearchTree.insert(6);
-    // binarySearchTree.left.right.value;
+
+          //     5
+          //   /   \
+          //  2     7
+          // / \   /
+          //    3 6
     // binarySearchTree.right.left.value
     expect(binarySearchTree.left.right.value).to.equal(3);
     expect(binarySearchTree.right.left.value).to.equal(6);
@@ -26,6 +31,8 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(2);
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
+    // binarySearchTree.contains(7)
+    binarySearchTree.contains(8)
     expect(binarySearchTree.contains(7)).to.equal(true);
     expect(binarySearchTree.contains(8)).to.equal(false);
   });
