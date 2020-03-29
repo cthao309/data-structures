@@ -46,10 +46,19 @@ TreeMethods.contains = function(value){
     // check if there is a right branch
     if(!this.right) {
       // if there is no right branch, return false. Has look through the tree
-      return false
+      return false;
     } else {
       // if there is a right branch, recurse back on the next right brnch
       this.right.contains(value);
+    }
+  } else if(value < this.value){
+    // check if there is a left branch
+    if(!this.left) {
+      // if there is no left branch, return false. Has look through the tree
+      return false;
+    } else {
+      // if there is a left branch, recurse back on the next left brnch
+      this.left.contains(value);
     }
   }
 }
